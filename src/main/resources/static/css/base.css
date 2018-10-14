@@ -6,11 +6,28 @@ body {
     height: 100%;
 }
 
-/*header {*/
-    /*width: 100%;*/
-    /*height: 48px;*/
-    /*background-color: #ddd;*/
-/*}*/
+.fix-width-center {
+    width: 1000px;
+    margin: auto;
+}
+
+.remote-top {
+    margin-top: 10px;
+}
+
+.title {
+    font-size: 0.5rem;
+}
+
+.meeting-check-top {
+    width: 100%;
+    border-top: 1px solid #898b8d;
+    margin-top: 50px;
+}
+
+.reserve-box {
+    margin-top: 10px;
+}
 
 ol {
     list-style: none;
@@ -71,59 +88,7 @@ ol {
     height: 4em;
 }
 
-.hour__00 {
-    top: 3em;
-}
-
-.hour__01 {
-    top: 7em;
-}
-
-.hour__02 {
-    top: 11em;
-}
-
-.hour__11 {
-    top: 15em;
-}
-
-.hour__12 {
-    top: 19em;
-}
-
-.hour__13 {
-    top: 23em;
-}
-
-.hour__14 {
-    top: 27em;
-}
-
-.hour__15 {
-    top: 31em;
-}
-
-.hour__16 {
-    top: 35em;
-}
-
-.hour--two {
-    height: 8em;
-}
-
-.hour--three {
-    height: 12em;
-}
-
 .repeat-one {
-    background: #3498db;
-    position: absolute;
-    text-indent: 3px;
-    width: 100%;
-    color: white;
-}
-
-.repeat-many {
     background: #27ae60;
     position: absolute;
     text-indent: 3px;
@@ -131,6 +96,13 @@ ol {
     color: white;
 }
 
+.repeat-many {
+    background: #3498db;
+    position: absolute;
+    text-indent: 3px;
+    width: 100%;
+    color: white;
+}
 
 footer {
     position: absolute;

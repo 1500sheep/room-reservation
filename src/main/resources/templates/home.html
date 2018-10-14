@@ -22,147 +22,82 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="row">
-        <form method="post" id="reserveForm" action="#">
-            <label for="room">회의실 종류</label>
-            <select class="form-control" id="room">
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-                <option>D</option>
-                <option>E</option>
-                <option>F</option>
-                <option>G</option>
-                <option>H</option>
-                <option>I</option>
-                <option>J</option>
-            </select>
+<div class="fix-width-center">
+    <nav class="navbar navbar-light bg-light" style="margin-top: 20px;">
+        <a class="navbar-brand">회의실 예약 어플리케이션</a>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">예약자 명</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="owner" placeholder="이름을 입력하세요">
+    </nav>
+    <div class="reserve-box">
+        <form method="post" id="reserveForm" action="#">
+            <div class="remote-top">
+                <label for="room">회의실 종류</label>
+                <select class="form-control" id="room">
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                    <option>E</option>
+                    <option>F</option>
+                    <option>G</option>
+                    <option>H</option>
+                    <option>I</option>
+                    <option>J</option>
+                </select>
+            </div>
+            <div class="remote-top">
+                <label>예약자 명</label>
+                <input type="text" class="form-control" name="name-reservation" placeholder="이름을 입력하세요. (최대 20자)">
+
+            </div>
+
+            <div class="remote-top">
+                <label>예약 날짜</label>
+                <input type="text" id="reserve-date" class="reserve-datepicker form-control" name="date-reservation">
+            </div>
+
+
+            <div class="remote-top">
+                <div>
+                    <label>시작 시간</label>
+                    <input type="number" name="start-hour" min="0" max="24" placeholder="00">
+                    :
+                    <input type="number" name="start-minute" step="30" min="0" max="30" placeholder="00">
+                </div>
+                <div>
+                    <label>종료 시간</label>
+                    <input type="number" name="end-hour" min="0" max="24" placeholder="00">
+                    :
+                    <input type="number" name="end-minute" step="30" min="0" max="30" placeholder="00">
+                </div>
+                <div>
+                    <label>반복 횟수</label>
+                    <input type="number" name="repeat-count" placeholder="반복횟수를 입력하세요 최대 100" min="1"
+                           max="100" value="1">
                 </div>
             </div>
 
-            <div class="form-group">
-                예약 날짜<br/> <input type="text" id="reserve-date" class="reserve-datepicker" name="reserve-date" placeholder="ex) 2018-11-31">
-            </div>
-
-
-            <div class="form-group">
-                시작 시간
-                <input type="number" name="start-hour" min="0" max="24">
-                <input type="number" name="start-minute" step="30" min="0" max="30">
-                종료 시간
-                <input type="number" name="end-hour" min="0" max="24">
-                <input type="number" name="end-minute" step="30" min="0" max="30">
-            </div>
-
-            <div class="form-group">
-                <label class="form-group">반복 횟수</label>
-
-                <input type="number" name="repeat-count" placeholder="반복횟수를 입력하세요 최대 100" min="1"
-                       max="100" value="1">
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">예약하기</button>
+            <button type="submit" class="btn btn-primary" style="float: right; background-color: #17a2b8;">예약하기</button>
         </form>
     </div>
 
-    <div class="form-group">
-        예약 확인<br/> <input type="text" id="meeting-date" class="reserve-datepicker" name="reserve-date" placeholder="ex) 2018-11-31">
-        <input type="button" class="btn" id="meeting-check" value="확인하기" />
+    <div name="check-reserve" style="width: 100%; border-top: 1px solid #898b8d; margin-top: 50px;padding-top: 20px; margin-bottom: 20px;">
+        <label class="remote-top">예약 현황 확인</label>
+        <input type="text" id="meeting-date" class="reserve-datepicker form-control" name="reserve-date" style="width: 70%; display: inline-block;">
+        <input type="button" class="btn btn-info" id="meeting-check" value="확인하기" style="display: inline-block;"/>
     </div>
-
-
-    <section class="timetable">
-        <ol class="timings">
-            <li><time datetime="00:00">0000</time></li>
-            <li>0100</li>
-            <li>0200</li>
-            <li>0300</li>
-            <li>0400</li>
-            <li>0500</li>
-            <li>0600</li>
-            <li>0700</li>
-            <li>0800</li>
-            <li>0900</li>
-            <li>1000</li>
-            <li>1100</li>
-            <li>1200</li>
-            <li>1300</li>
-            <li>1400</li>
-            <li>1500</li>
-            <li>1600</li>
-            <li>1700</li>
-            <li>1800</li>
-            <li>1900</li>
-            <li>2000</li>
-            <li>2100</li>
-            <li>2200</li>
-            <li>2300</li>
-            <li>2400</li>
-        </ol>
-        <ol class="meeting-table">
-            <li class="room">
-                <span class="name" name="A">회의실 A</span>
-
-
-            </li>
-            <li class="room">
-                <span class="name" name="B">회의실 B</span>
-            </li>
-            <li class="room">
-                <span class="name" name="C">회의실 C</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="D">회의실 D</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="E">회의실 E</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="F">회의실 F</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="G">회의실 G</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="H">회의실 H</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="I">회의실 I</span>
-
-            </li>
-            <li class="room">
-                <span class="name" name="J">회의실 J</span>
-
-            </li>
-        </ol>
-    </section>
 
 </div>
 
 <script type="text/javascript">
-
     datepicker('.reserve-datepicker', {
         firstDayOfWeek: 1,
         months        : {
-            short: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
-            long : ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+            short: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            long : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         },
         weekdays      : {
-            short: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-            long : ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+            short: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            long : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         }
     });
 
