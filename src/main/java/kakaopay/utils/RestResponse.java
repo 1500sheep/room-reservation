@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Slf4j
 public class RestResponse<T> {
 
     private T data;
@@ -29,12 +27,10 @@ public class RestResponse<T> {
     }
 
     public static <T> RestResponse<T> success(T data) {
-        log.info("restresponse success : "+data);
         return success(data, null);
     }
 
     public static <T> RestResponse<T> success(T data, String message) {
-        log.info("restresponse success : "+data);
         return new RestResponse<T>(data, message);
     }
 
