@@ -71,6 +71,7 @@
             };
             self.picker = document.createElement('div');
             self.picker.classList.add('vanilla-datepicker');
+            self.picker.style.zIndex = 10;
             self.picker.style.left = position.x + 'px';
             self.picker.style.top = position.y + 'px';
             self.picker.appendChild( self.drawNavigation() );

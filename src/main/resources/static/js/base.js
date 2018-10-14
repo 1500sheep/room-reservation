@@ -1,7 +1,5 @@
-const $ = selector => document.querySelector(selector);
-
-const $all = selector => document.querySelectorAll(selector);
-
+import {$} from './utils.js';
+import {timetableTemplate, reservationTemplate} from './template/meetingTableTemplate.js';
 
 Date.prototype.yyyymmdd = function () {
     const mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -14,42 +12,51 @@ Date.prototype.yyyymmdd = function () {
 };
 
 const today = new Date();
+const date_today = today.yyyymmdd();
+
+$('input[id=reserve-date]').placeholder = "e.g. " + date_today;
+$('input[id=meeting-date]').placeholder = "e.g. " + date_today;
+$('input[id=meeting-date]').value = date_today;
 
 function validateError(response) {
     response.json().then(({errors}) => {
-        errors.forEach((error) => {
-            console.log("error : " + error);
+        errors.forEach(error => {
+            alert("error comes : " + error.message);
         })
     })
 }
 
-function validateReserveDate(reserveDate) {
+function compareDateOverToday(date) {
+    if (new Date().getDate() > date.getDate()) {
+        alert("오늘 이후만 예약 가능합니다.");
+        return false;
+    }
+    return true;
+}
+
+function getAndValidateReserveDate(message, reserveDate) {
     const regEx = /^\d{4}-\d{2}-\d{2}$/;
 
     if (!reserveDate.match(regEx)) {
-        alert("예약 날짜를 제대로 입력해주세요");
+        alert(message + "를 제대로 입력해주세요");
         return false;
     }  // Invalid format
 
     const d = new Date(reserveDate);
 
     if (Number.isNaN(d.getTime())) {
-        alert("예약 날짜를 제대로 입력해주세요");
+        alert(message + "를 제대로 입력해주세요");
         return false;
     } // Invalid date
 
     if (d.toISOString().slice(0, 10) !== reserveDate) {
-        alert("예약 날짜를 제대로 입력해주세요");
-        return false;
-    }
-
-    if (new Date().getDate() > d.getDate()) {
-        alert("오늘 이후만 예약 가능합니다.");
+        alert(message + "를 제대로 입력해주세요");
         return false;
     }
 
     return true;
 }
+
 
 function reserveHandler(event) {
     event.preventDefault();
@@ -61,15 +68,19 @@ function reserveHandler(event) {
         return;
     }
 
-    const owner = $('input[name=reservationName]').value;
-    if (!owner) {
-        alert("예약자 명을 입력해주세요");
+    const reservationName = $('input[name=name-reservation]').value;
+    if (!reservationName || reservationName.length > 20) {
+        alert("예약자 명을 제대로 입력해주세요");
         return;
     }
 
     const reserveDate = $('input[id=reserve-date]').value;
 
-    if (!validateReserveDate(reserveDate)) {
+    if (!getAndValidateReserveDate("예약 날짜", reserveDate)) {
+        return;
+    }
+
+    if (!compareDateOverToday(new Date(reserveDate))) {
         return;
     }
 
@@ -86,18 +97,18 @@ function reserveHandler(event) {
         return;
     }
 
-    if (endHour < startHour || (endHour == startHour && endMinute <= startMinute)) {
+    if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
         alert("시작 시간이 종료시간 보다 클 수 없습니다.")
         return;
     }
 
     startHour = startHour < 10 ? '0' + startHour : startHour;
-    startMinute = startMinute == 0 ? '0' + startMinute : startMinute;
+    startMinute = startMinute === 0 ? '0' + startMinute : startMinute;
     endHour = endHour < 10 ? '0' + endHour : endHour;
-    endMinute = endMinute == 0 ? '0' + endMinute : endMinute;
+    endMinute = endMinute === 0 ? '0' + endMinute : endMinute;
 
-    const startDate = startHour + ":" + startMinute;
-    const endDate = endHour + ":" + endMinute;
+    const startTime = startHour + ":" + startMinute;
+    const endTime = endHour + ":" + endMinute;
 
     const repeatCount = $('input[name=repeat-count]').value;
     if (repeatCount < 1 || repeatCount > 100) {
@@ -111,10 +122,10 @@ function reserveHandler(event) {
         credentials: 'same-origin',
         body       : JSON.stringify({
             roomName,
-            owner,
+            reservationName,
             reserveDate,
-            startDate,
-            endDate,
+            startTime,
+            endTime,
             repeatCount
         })
     })
@@ -127,34 +138,12 @@ function reserveHandler(event) {
             }
         })
         .then(({data}) => {
+            alert("예약 성공");
             console.log("data : ", data);
         })
         .catch(error => {
             location.reload();
         });
-}
-
-
-$('#reserveForm').addEventListener('submit', reserveHandler);
-$('input[type=button]').addEventListener('click', function(){
-    const meetingDate = $('input[id=meeting-date]').value;
-
-    // if (!validateReserveDate(meetingDate)) {
-    //     return;
-    // }
-    getMeetingReservationByDate(meetingDate);
-});
-
-function reservationTemplate({owner, endDate, startDate, reservationGroup}) {
-    const startHeight = 3 + parseInt(startDate.split(":")[0]) * 4 + parseInt(startDate.split(":")[1]) / 15;
-    const endHeight = 3 + parseInt(endDate.split(":")[0]) * 4 + parseInt(endDate.split(":")[1]) / 15;
-
-    return `
-    <div class="repeat-one" style="top:${startHeight}em; height:${endHeight-startHeight}em;">
-            <div class="title"></div>
-            <div>${owner}</div>
-        </div>
-    `;
 }
 
 function getMeetingReservationByDate(date) {
@@ -168,13 +157,31 @@ function getMeetingReservationByDate(date) {
             }
         })
         .then(({data}) => {
+            const timetable = $('.timetable');
+
+            if (timetable) {
+                timetable.remove();
+            }
+
+            $('div[name=check-reserve]').insertAdjacentHTML('afterend', timetableTemplate());
             data.forEach(reservation => {
                 $(`span[name=${reservation.room.name}]`).insertAdjacentHTML('afterend', reservationTemplate(reservation));
             });
         })
         .catch(error => {
-            location.reload();
+            console.log("error : ", error);
+            // location.reload();
         });
 }
 
-document.addEventListener("DOMContentLoaded", getMeetingReservationByDate(today.yyyymmdd()));
+
+$('#reserveForm').addEventListener('submit', reserveHandler);
+$('input[type=button]').addEventListener('click', function () {
+    const meetingDate = $('input[id=meeting-date]').value;
+
+    if (!getAndValidateReserveDate("예약 확인 날짜", meetingDate)) {
+        return;
+    }
+    getMeetingReservationByDate(meetingDate);
+});
+document.addEventListener("DOMContentLoaded", getMeetingReservationByDate(date_today));

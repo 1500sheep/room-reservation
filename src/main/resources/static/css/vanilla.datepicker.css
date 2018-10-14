@@ -8,6 +8,7 @@
     font-size: 13px;
     position: absolute;
     width:200px;
+    z-index: 10;
 }
 .vanilla-datepicker > .title-nav {
     align-items:center;
