@@ -1,24 +1,26 @@
 package kakaopay.domain;
 
 
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Slf4j
 public class Reservation {
-    private final static String regexTime = "[0-9][0-9]:[0,3][0]";
+
+    private final static int NOT_EXISTS = -1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,22 +37,35 @@ public class Reservation {
 
     @NotNull
     @Column(nullable = false)
-    private String owner;
+    private String reservationName;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reserveDate;
 
     @NotNull
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private LocalTime startDate;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime startTime;
 
     @NotNull
-    @DateTimeFormat(pattern = regexTime)
-    private LocalTime endDate;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime endTime;
 
-    public void setStartDate(LocalTime startDate) {
-        log.info("sample :  " + startDate);
-        this.startDate = startDate;
+    // ReservationGroup이 존재하는 예약일 경우 현재 예약 부터 남은 반복횟수가 몇번인지 확인할 수 있다
+    public int getCurrentRepeatNum() {
+        if (reservationGroup == null) {
+            return NOT_EXISTS;
+        }
+        int repeatCount = reservationGroup.getRepeatCount();
+        int leftWeeks = (int) ChronoUnit.WEEKS.between(reservationGroup.getStartDate(), reserveDate);
+
+        return repeatCount - leftWeeks - 1;
+    }
+
+    public int getRepeatNum() {
+        if (reservationGroup == null) {
+            return NOT_EXISTS;
+        }
+        return reservationGroup.getRepeatCount();
     }
 }

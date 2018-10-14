@@ -2,6 +2,7 @@ package kakaopay.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class Room {
     private Long id;
 
     @NotNull
-    @Column
+    @Length(min = 1, max = 50)
+    @Column(nullable = false, length = 5)
     private String name;
 }
