@@ -86,20 +86,33 @@ Location: https://localhost/reserve/1
 
 #### Error Response
 
-|                type                 |                     description                     |                        response data                         |
-| :---------------------------------: | :-------------------------------------------------: | :----------------------------------------------------------: |
-| Invalid parameter - Bad Request 400 | 도메인 설정에 맞지 않는 parameter, validation check | {<br/>            "field": "startTime",
-            "message": "시작 시간이 겹칩니다"
-        } |
-| TimeFormatException - Forbidden 403 |           정각 또는 30분의 시간이 아닐 경           | {<br/>            "field": "date",
-            "message": "시간 입력을 제대로 해주세요"
-        } |
-|    Room not Found- Not Found 40     |             존재 하지 않는 회의실 일 때             | {             <br />"message": "회의실이 존재하지 않습니다."         } |
-| NotAllowedException - Forbidden 403 |           시작 시간, 종료 시간이 겹칠 때            | {<br/>            "field": "startTime",
-            "message": "시작 시간이 겹칩니다"
-        } |
+|                type                 |                     description                     |
+| :---------------------------------: | :-------------------------------------------------: |
+| Invalid parameter - Bad Request 400 | 도메인 설정에 맞지 않는 parameter, validation check |
+| TimeFormatException - Forbidden 403 |          정각 또는 30분의 시간이 아닐 경우          |
+|    Room not Found- Not Found 404    |             존재 하지 않는 회의실 일 때             |
+| NotAllowedException - Forbidden 403 |           시작 시간, 종료 시간이 겹칠 때            |
 
-
+```
+{
+"errors":
+	[{
+     "field": "startTime", // Invalid parameter
+     "message": "시작 시간이 겹칩니다"
+	},
+	{
+	"field": "date",
+    "message": "시간 입력을 제대로 해주세요" // TimeFormatException
+    },
+    {
+    "message": "회의실이 존재하지 않습니다." // Room not Found
+    },
+    {
+    "field": "startTime", // NotAllowedException
+    "message": "시작 시간이 겹칩니다"
+    }
+]}
+```
 
 <hr/>
 
@@ -121,32 +134,48 @@ Get /api/reserve?date={date}
 HTTP/1.1 200 Ok
 ```
 
-|      Return       |                         description                          |                        response data                         |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| List<Reservation> | 예약 정보 List. 예약 그룹이 존재할 경우 reservationGroup이 null이 아니며, 예약 그룹의 총 반복횟수와 선택한 날짜의 예약에서 총 남은 반복 횟수를 알려주는 ```repeatNum ``` ,  ```currentRepeatNum```이 있다. | [{<br/>            "id": 1,
-            "room": {
-                "id": 1,
-                "name": "A"
-            },
-            "reservationGroup": null, 
-            "reservationName": "예약1",
-            "reserveDate": "2018-10-15",
-            "startTime": "00:30:00",
-            "endTime": "03:00:00",
-            "currentRepeatNum": -1,
-            "repeatNum": -1
+|      return       |                         description                          |
+| :---------------: | :----------------------------------------------------------: |
+| List<Reservation> | 예약 정보 List. 예약 그룹이 존재할 경우 reservationGroup이 null이 아니며, 예약 그룹의 총 반복횟수와 선택한 날짜의 예약에서 총 남은 반복 횟수를 알려주는 ```repeatNum ``` ,  ```currentRepeatNum```이 있다. |
+
+```
+ [{ 
+     "id": 1,
+     "room": {
+        "id": 1,
+        "name": "A"
         },
-         ...] |
-|                   |                                                              |                                                              |
-|                   |                                                              |                                                              |
+
+     "reservationGroup": null, 
+     "reservationName": "예약1",
+     "reserveDate": "2018-10-15",
+     "startTime": "00:30:00",
+     "endTime": "03:00:00",
+     "currentRepeatNum": -1,
+     "repeatNum": -1
+        },
+  ...
+  ]
+```
+
+
 
 #### Error Response
 
-|                type                 |             description              |                        response data                         |
-| :---------------------------------: | :----------------------------------: | :----------------------------------------------------------: |
-| Invalid parameter - Bad Request 400 | parameter date 형식이 옳지 않는 경우 | {<br/>            "field": "date",
+|                type                 |             description              |
+| :---------------------------------: | :----------------------------------: |
+| Invalid parameter - Bad Request 400 | parameter date 형식이 옳지 않는 경우 |
+
+```
+{
+"errors":[
+			{
+			field": "date", // Invalid parameter
             "message": "date time이 옳지 않습니다. "
-        } |
+       		}
+        ]
+}
+```
 
 
 
