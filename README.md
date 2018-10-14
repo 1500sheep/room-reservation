@@ -95,22 +95,22 @@ Location: https://localhost/reserve/1
 
 ```
 {
-"errors":
-	[{
-     "field": "startTime", // Invalid parameter
-     "message": "시작 시간이 겹칩니다"
+"errors":[
+	{
+	     "field": "startTime", // Invalid parameter
+	     "message": "시작 시간이 겹칩니다"
 	},
 	{
-	"field": "date",
-    "message": "시간 입력을 제대로 해주세요" // TimeFormatException
-    },
-    {
-    "message": "회의실이 존재하지 않습니다." // Room not Found
-    },
-    {
-    "field": "startTime", // NotAllowedException
-    "message": "시작 시간이 겹칩니다"
-    }
+	     "field": "date",
+	    "message": "시간 입력을 제대로 해주세요" // TimeFormatException
+    	},
+    	{
+    	    "message": "회의실이 존재하지 않습니다." // Room not Found
+    	},
+	{
+	   "field": "startTime", // NotAllowedException
+	   "message": "시작 시간이 겹칩니다"
+    	}
 ]}
 ```
 
@@ -136,7 +136,7 @@ HTTP/1.1 200 Ok
 
 |      return       |                         description                          |
 | :---------------: | :----------------------------------------------------------: |
-| List<Reservation> | 예약 정보 List. 예약 그룹이 존재할 경우 reservationGroup이 null이 아니며, 예약 그룹의 총 반복횟수와 선택한 날짜의 예약에서 총 남은 반복 횟수를 알려주는 ```repeatNum ``` ,  ```currentRepeatNum```이 있다. |
+| List | 예약 정보 List. 예약 그룹이 존재할 경우 reservationGroup이 null이 아니며, 예약 그룹의 총 반복횟수와 선택한 날짜의 예약에서 총 남은 반복 횟수를 알려주는 ```repeatNum ``` ,  ```currentRepeatNum```이 있다. |
 
 ```
  [{ 
@@ -169,9 +169,9 @@ HTTP/1.1 200 Ok
 ```
 {
 "errors":[
-			{
-			field": "date", // Invalid parameter
-            "message": "date time이 옳지 않습니다. "
+		{
+		field": "date", // Invalid parameter
+		"message": "date time이 옳지 않습니다. "
        		}
         ]
 }
@@ -225,10 +225,10 @@ HTTP/1.1 200 Ok
   boolean existsByRoomAndReserveDateAndStartTimeLessThanEqualAndEndTimeGreaterThan(Room room, LocalDate reserveDate, LocalTime time, LocalTime time2);
   
   // 동일한 방, 동일한 예약 날짜 그리고 종료시간이 이미 예약된 예약의 시작 시간과 종료시간 사이에 있는 지 확인
-      boolean existsByRoomAndReserveDateAndStartTimeLessThanAndEndTimeGreaterThanEqual(Room room, LocalDate reserveDate, LocalTime time, LocalTime time2);
+  boolean existsByRoomAndReserveDateAndStartTimeLessThanAndEndTimeGreaterThanEqual(Room room, LocalDate reserveDate, LocalTime time, LocalTime time2);
   
   // 동일한 방, 동일한 예약 날짜 그리고 시작시간과 종료시간이 이미 예약된 예약의 시작시간을 범위 안에 두고 있는 지 확인
-      boolean existsByRoomAndReserveDateAndStartTimeGreaterThanEqualAndStartTimeLessThan(Room room, LocalDate reserveDate, LocalTime time, LocalTime time2);
+  boolean existsByRoomAndReserveDateAndStartTimeGreaterThanEqualAndStartTimeLessThan(Room room, LocalDate reserveDate, LocalTime time, LocalTime time2);
   ```
 
 
